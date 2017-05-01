@@ -1,0 +1,7 @@
+rootProject.name = 'homework-project'
+include 'back-end'
+include 'front-end'
+rootProject.name = 'homework-project'
+include 'backend'
+include 'frontend'
+
