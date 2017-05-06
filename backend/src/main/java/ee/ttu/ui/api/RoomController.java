@@ -4,6 +4,7 @@ import ee.ttu.ui.core.RoomService;
 import ee.ttu.ui.domain.common.Result;
 import ee.ttu.ui.domain.json.PlayerReadyJson;
 import ee.ttu.ui.domain.json.RoomCreateJson;
+import ee.ttu.ui.domain.json.WordResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,11 @@ public class RoomController {
     @Autowired
     public RoomController(RoomService roomService) {
         this.roomService = roomService;
+    }
+
+    @GetMapping("/{roomId}")
+    public Result getRoom(@PathVariable String roomId) {
+        return Result.ok(roomService.getRoomByIdentifier(roomId));
     }
 
     @GetMapping("rooms")
@@ -36,8 +42,12 @@ public class RoomController {
 
     @RequestMapping(value = "player-ready", method = RequestMethod.POST)
     public Result setPlayerReady(@RequestBody PlayerReadyJson playerReadyJson) {
-        roomService.setRoomPlayerStatusToReady(playerReadyJson);
-        return Result.ok();
+        return Result.ok(roomService.setRoomPlayerStatusToReady(playerReadyJson));
+    }
+
+    @PostMapping("submit-result")
+    public Result isSubmitterWinner(@RequestBody WordResult wordResult) {
+        return Result.ok(roomService.determineWinner(wordResult));
     }
 
     @RequestMapping(value = "ready-wait", method = RequestMethod.GET)

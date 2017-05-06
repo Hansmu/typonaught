@@ -1,7 +1,5 @@
 package ee.ttu.ui.domain.json;
 
-import java.util.UUID;
-
 public class PlayerReadyJson {
     private String playerIdentifier;
     private String roomIdentifier;

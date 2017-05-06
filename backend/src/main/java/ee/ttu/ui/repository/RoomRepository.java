@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Query("SELECT room FROM Room room WHERE room.roomIdentifier = :roomIdentifier")
-    Room findOneByRoomIdentifier(String roomIdentifier);
+    Room findOneByRoomIdentifier(@Param("roomIdentifier") String roomIdentifier);
 
     @Query("SELECT room.roomIdentifier " +
             "FROM Room room " +

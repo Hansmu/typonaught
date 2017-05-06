@@ -10,5 +10,6 @@ CREATE TABLE room
   player_two_ready BOOLEAN,
   player_one_score INT,
   player_two_score INT,
+  current_word_index INT,
   typing_text CLOB
 );

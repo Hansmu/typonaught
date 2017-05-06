@@ -2,6 +2,7 @@ package ee.ttu.ui.domain;
 
 import javax.persistence.*;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
 @Table(name="room")
@@ -17,16 +18,21 @@ public class Room {
     private Boolean playerTwoReady;
     private Integer playerOneScore;
     private Integer playerTwoScore;
+    private Integer currentWordIndex;
 
     @Column(name="typing_text")
     @Lob
     private String typingText;
+
+    @Transient
+    private String activeWord;
 
     public Room() {}
 
     public Room(String roomIdentifier, String playerOneIdentifier) {
         this.roomIdentifier = roomIdentifier;
         this.playerOneIdentifier = playerOneIdentifier;
+        this.currentWordIndex = 0;
 
         this.playerOneReady = true;
         this.playerTwoReady = false;
@@ -102,5 +108,27 @@ public class Room {
 
     public void setTypingText(String typingText) {
         this.typingText = typingText;
+    }
+
+    public Integer getCurrentWordIndex() {
+        return currentWordIndex;
+    }
+
+    public void setCurrentWordIndex(Integer currentWordIndex) {
+        this.currentWordIndex = currentWordIndex;
+    }
+
+    public String getActiveWord() {
+        String[] words = typingText.split(" ");
+
+        if (!(playerOneReady && playerTwoReady)) {
+            currentWordIndex = ThreadLocalRandom.current().nextInt(0, words.length);
+        }
+
+        return words[currentWordIndex];
+    }
+
+    public void setActiveWord(String activeWord) {
+        this.activeWord = activeWord;
     }
 }
