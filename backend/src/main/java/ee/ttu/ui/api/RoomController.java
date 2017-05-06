@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("room")
-@CrossOrigin(origins="http://localhost:8080")
+@CrossOrigin
 public class RoomController {
 
     private RoomService roomService;
