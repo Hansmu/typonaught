@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -54,5 +55,9 @@ public class RoomService {
 
     public UUID generatePlayerId() {
         return UUID.randomUUID();
+    }
+
+    public List<Room> getAllRooms() {
+        return roomRepository.findAll();
     }
 }

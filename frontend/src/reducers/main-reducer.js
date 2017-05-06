@@ -1,4 +1,4 @@
-import { GET_PLAYER_KEY, CREATE_LOBBY } from '../actions/types';
+import { GET_PLAYER_KEY, CREATE_LOBBY, GET_ROOMS } from '../actions/types';
 
 const INITIAL_STATE = { examples: [], helloWorldMessage: '' };
 
@@ -14,6 +14,8 @@ export default function(state = INITIAL_STATE, action) {
                 action.onSuccess(lobbyId);
             });
             return {...state };
+        case GET_ROOMS:
+            return { ...state, lobbies: action.payload.data.data };
         default:
             return state;
     }

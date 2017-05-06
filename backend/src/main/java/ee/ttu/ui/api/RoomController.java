@@ -2,7 +2,6 @@ package ee.ttu.ui.api;
 
 import ee.ttu.ui.core.RoomService;
 import ee.ttu.ui.domain.common.Result;
-import ee.ttu.ui.domain.json.IdentifierJson;
 import ee.ttu.ui.domain.json.PlayerReadyJson;
 import ee.ttu.ui.domain.json.RoomCreateJson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,11 @@ public class RoomController {
     @Autowired
     public RoomController(RoomService roomService) {
         this.roomService = roomService;
+    }
+
+    @GetMapping("rooms")
+    public Result getUnreadyRooms() {
+        return Result.ok(roomService.getAllRooms());
     }
 
     @RequestMapping(value = "generate-player-id", method = RequestMethod.GET)

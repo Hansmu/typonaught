@@ -1,5 +1,5 @@
-import { CREATE_LOBBY } from '../types';
-import { postRequest, externalGetRequest } from '../../../utils/request-utils';
+import { CREATE_LOBBY, GET_ROOMS } from '../types';
+import { postRequest, externalGetRequest, getRequest } from '../../../utils/request-utils';
 import { getPlayerId } from '../../../utils/ui-utils';
 
 
@@ -24,5 +24,12 @@ export function createLobby(push) {
         onSuccess: lobbyId =>  {
             push(`room/${lobbyId}`);
         }
+    };
+}
+
+export function getRooms() {
+    return {
+        type: GET_ROOMS,
+        payload: getRequest('room/rooms')
     };
 }
