@@ -10,5 +10,5 @@ CREATE TABLE room
   player_two_ready BOOLEAN,
   player_one_score INT,
   player_two_score INT,
-  typing_text VARCHAR2(4000)
+  typing_text CLOB
 );

@@ -4,6 +4,7 @@ import ee.ttu.ui.core.RoomService;
 import ee.ttu.ui.domain.common.Result;
 import ee.ttu.ui.domain.json.IdentifierJson;
 import ee.ttu.ui.domain.json.PlayerReadyJson;
+import ee.ttu.ui.domain.json.RoomCreateJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,8 @@ public class RoomController {
     }
 
     @RequestMapping(value = "start-room", method = RequestMethod.POST)
-    public Result generateRoom(@RequestBody IdentifierJson playerOneIdentifier) {
-        return Result.ok(roomService.generateNewRoom(playerOneIdentifier.getIdentifier()));
+    public Result generateRoom(@RequestBody RoomCreateJson roomCreateJson) {
+        return Result.ok(roomService.generateNewRoom(roomCreateJson));
     }
 
     @RequestMapping(value = "player-ready", method = RequestMethod.POST)

@@ -10,7 +10,7 @@ const headers = {
 };
 
 export function externalGetRequest(url) {
-    return axios.get(url, headers);
+    return axios.get(url, { "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" });
 }
 
 export function getRequest(uri) {

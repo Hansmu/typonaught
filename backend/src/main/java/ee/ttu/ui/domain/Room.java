@@ -1,9 +1,6 @@
 package ee.ttu.ui.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -20,6 +17,9 @@ public class Room {
     private Boolean playerTwoReady;
     private Integer playerOneScore;
     private Integer playerTwoScore;
+
+    @Column(name="typing_text")
+    @Lob
     private String typingText;
 
     public Room() {}
