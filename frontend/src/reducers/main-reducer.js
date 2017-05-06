@@ -8,9 +8,12 @@ export default function(state = INITIAL_STATE, action) {
             window.localStorage.setItem('player-key', action.payload.data.data);
             return { ...state, playerId: action.payload.data.data };
         case CREATE_LOBBY:
-            console.log(action.payload.data.data);
-            window.localStorage.setItem('lobby-key', action.payload.data.data);
-            return {...state, lobbyId: action.payload.data.data };
+            action.payload.then(response => {
+                const lobbyId = response.data.data;
+                window.localStorage.setItem('lobby-key', lobbyId);
+                action.onSuccess(lobbyId);
+            });
+            return {...state };
         default:
             return state;
     }

@@ -21,7 +21,7 @@ class Homepage extends Component {
 
         return (
             <div>
-                <Button onClick={this.props.dispatch(createLobby())}>
+                <Button onClick={() => this.props.dispatch(createLobby(this.props.router.push))}>
                     Create lobby
                 </Button>
                 <Button>

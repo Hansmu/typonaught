@@ -9,6 +9,10 @@ const headers = {
     }
 };
 
+export function externalGetRequest(url) {
+    return axios.get(url, headers);
+}
+
 export function getRequest(uri) {
     return axios.get(`${config.backendUrl}/${uri}`, headers);
 }
