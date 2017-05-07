@@ -1,0 +1,14 @@
+.round-button {
+    width: 100px;
+    height: 100px;
+    background: #4bf282;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    position: relative;
+}
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}

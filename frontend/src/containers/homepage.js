@@ -1,11 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Button, Panel, Accordion, Table } from 'react-bootstrap';
+import { Button, Panel, Accordion, Table, Glyphicon, Row, Col } from 'react-bootstrap';
 
 import { getPlayerKey, createLobby, getRooms, joinRoom , getHighScores} from '../actions';
 import { getPlayerId, getLobbyId } from '../../utils/ui-utils';
 
+import '../../style/animations/round-button.css';
+
 class Homepage extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.renderCreateLobbyButton = this.renderCreateLobbyButton.bind(this);
+    }
 
     componentWillMount() {
         const playerKey = getPlayerId();
@@ -31,7 +39,6 @@ class Homepage extends Component {
                 <tr key={lobby.id}>
                     <td>{lobby.id}</td>
                     <td>{lobby.roomIdentifier}</td>
-                    <td>{lobby.typingText.substring(0, 20)}</td>
                     <td>
                         <Button disabled={!isJoiningAllowed}
                                 onClick={() => this.joinLobby(lobby.roomIdentifier)}>
@@ -47,7 +54,6 @@ class Homepage extends Component {
                 <tr>
                     <th>#</th>
                     <th>Room Identifier</th>
-                    <th>Text Example</th>
                     <th/>
                 </tr>
             </thead>
@@ -88,17 +94,26 @@ class Homepage extends Component {
         );
     }
 
+    renderCreateLobbyButton() {
+        return (
+            <Row>
+                <Col md={12} style={{marginBottom: '20px', marginTop: '20px'}}>
+                    <div className="round-button col-centered"
+                         onClick={() => this.props.dispatch(createLobby(this.props.router.push))}>
+                        <Glyphicon glyph="plus" style={{fontSize: '50px', color: 'white', marginTop: '23px', marginLeft: '26px'}}/>
+                    </div>
+                </Col>
+            </Row>
+        );
+    }
+
     render () {
         return (
             <div>
-                <Button onClick={() => this.props.dispatch(createLobby(this.props.router.push))}>
-                    Create lobby
-                </Button>
-                <Accordion>
-                    <Panel header="Lobbies" eventKey="1">
+                { this.renderCreateLobbyButton() }
+                    <Panel header={<h3>Lobbies</h3>} eventKey="1">
                         { this.createLobbyList(this.props.lobbies) }
                     </Panel>
-                </Accordion>
                 { this.createHighScoreTable() }
             </div>
         );
