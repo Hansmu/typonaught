@@ -1,4 +1,4 @@
-import { CREATE_LOBBY, GET_ROOMS, JOIN_ROOM, GET_ROOM, DETERMINE_WINNER, SET_USER_READY } from '../types';
+import { CREATE_LOBBY, GET_ROOMS, JOIN_ROOM, GET_ROOM, DETERMINE_WINNER, SET_USER_READY, GET_HIGH_SCORES, GET_GAME_SCORES } from '../types';
 import { postRequest, externalGetRequest, getRequest } from '../../../utils/request-utils';
 import { getPlayerId } from '../../../utils/ui-utils';
 
@@ -54,11 +54,11 @@ export function joinRoom(roomIdentifier, push) {
     };
 }
 
-export function determineWinner(roomIdentifier, isWordCorrect) {
+export function determineWinner(roomIdentifier, isWordCorrect, timeTaken) {
     return {
         type: DETERMINE_WINNER,
         payload: postRequest('room/submit-result', {
-            roomIdentifier, isWordCorrect,
+            roomIdentifier, isWordCorrect, timeTaken,
             userIdentifier: getPlayerId()
         })
     };
@@ -72,5 +72,19 @@ export function setUserReady(roomIdentifier) {
             playerIdentifier: getPlayerId(),
             roomIdentifier
         }),
+    };
+}
+
+export function getHighScores() {
+    return {
+        type: GET_HIGH_SCORES,
+        payload: getRequest('room/high-scores')
+    };
+}
+
+export function getGameScores(roomIdentifier) {
+    return {
+        type: GET_GAME_SCORES,
+        payload: getRequest(`room/${roomIdentifier}/scores`)
     };
 }

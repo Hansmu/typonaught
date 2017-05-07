@@ -1,14 +1,16 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'react-loading';
-import { Button } from 'react-bootstrap';
+import { Button,Table } from 'react-bootstrap';
 
-import { getPlayerKey, createLobby, getRoom, determineWinner, setUserReady } from '../actions';
-import { getPlayerId, getLobbyId } from '../../utils/ui-utils';
+import { getRoom, determineWinner, setUserReady, getGameScores } from '../actions';
 
 let initialRender = true;
 let isSubmitted = false;
 let isNewRoundClicked = true;
+
+let startTime = 0;
+let wordStarted = false;
 
 class TypingRoom extends Component {
 
@@ -21,6 +23,8 @@ class TypingRoom extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.sendUserReady = this.sendUserReady.bind(this);
         this.renderResults = this.renderResults.bind(this);
+        this.renderTextArea = this.renderTextArea.bind(this);
+        this.renderGameScores = this.renderGameScores.bind(this);
         this.renderNewMatchButton = this.renderNewMatchButton.bind(this);
     }
 
@@ -28,6 +32,7 @@ class TypingRoom extends Component {
         initialRender = true;
         isSubmitted = false;
         isNewRoundClicked = true;
+        wordStarted = false;
     }
 
     showWaitingForPlayer() {
@@ -43,7 +48,9 @@ class TypingRoom extends Component {
         event.preventDefault();
 
         const isWordCorrect = this.props.room.activeWord === this.state.enteredWord;
-        this.props.dispatch(determineWinner(this.props.params.roomId, isWordCorrect));
+        const timeTaken = new Date().getTime() - startTime;
+
+        this.props.dispatch(determineWinner(this.props.params.roomId, isWordCorrect, timeTaken));
 
         this.setState({enteredWord: ''});
         isSubmitted = true;
@@ -81,6 +88,65 @@ class TypingRoom extends Component {
         );
     }
 
+    setStartTime() {
+        const isWaiting = !this.props.room.playerOneReady || !this.props.room.playerTwoReady;
+
+        if (!isWaiting && !isSubmitted && wordStarted) {
+            startTime = new Date().getTime();
+            wordStarted = false;
+        }
+
+        if (isWaiting) {
+            wordStarted = true;
+        }
+    }
+
+    renderGameScores() {
+        const gameScoreRows = this.props.gameScores.map(gameScore => {
+            return (
+                <tr key={gameScore.id}>
+                    <td>{gameScore.victory}</td>
+                    <td>{gameScore.word}</td>
+                    <td>{gameScore.timeSpent}</td>
+                </tr>
+            );
+        });
+
+        return (
+            <Table striped bordered condensed hover>
+                <thead>
+                <tr>
+                    <th>Victory</th>
+                    <th>Word</th>
+                    <th>Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                    { gameScoreRows }
+                </tbody>
+            </Table>
+        );
+    }
+
+    renderTextArea() {
+        const isWaiting = !this.props.room.playerOneReady || !this.props.room.playerTwoReady;
+
+        if (!isWaiting && !isSubmitted) {
+            return (
+                <div>
+                    Current word to type: { this.props.room.activeWord }
+                    <form onSubmit={this.handleSubmit}>
+                        <input onChange={event => this.setState({enteredWord: event.target.value})}
+                               value={this.state.enteredWord}
+                               name="enteredWord"/>
+                    </form>
+                </div>
+            );
+        }
+
+        return this.renderGameScores();
+    }
+
     render () {
         const isWaiting = !this.props.room.playerOneReady || !this.props.room.playerTwoReady;
 
@@ -88,23 +154,14 @@ class TypingRoom extends Component {
             initialRender = false;
         }
 
+        this.setStartTime();
         return (
             <div>
                 { this.renderResults() }
                 { isSubmitted && isWaiting && this.renderNewMatchButton() }
                 { ((!initialRender && isSubmitted && !isWaiting) || (!isSubmitted && isWaiting && isNewRoundClicked)) && this.showWaitingForPlayer() }
 
-                {
-                    !isWaiting && !isSubmitted &&
-                    <div>
-                        Current word to type: { this.props.room.activeWord }
-                        <form onSubmit={this.handleSubmit}>
-                            <input onChange={event => this.setState({enteredWord: event.target.value})}
-                                   value={this.state.enteredWord}
-                                   name="enteredWord"/>
-                        </form>
-                    </div>
-                }
+                { this.renderTextArea() }
             </div>
         );
     }
@@ -113,7 +170,8 @@ class TypingRoom extends Component {
 const mapStateToProps = (state) => ({
     playerId: state.main.playerId,
     room: state.main.room || { playerTwoReady: false },
-    isWinner: state.main.isWinner
+    isWinner: state.main.isWinner,
+    gameScores: state.main.gameScores || []
 });
 
 export default connect(mapStateToProps, dispatch => ({dispatch}))(TypingRoom);

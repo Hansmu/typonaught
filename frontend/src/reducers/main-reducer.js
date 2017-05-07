@@ -1,4 +1,4 @@
-import { GET_PLAYER_KEY, CREATE_LOBBY, GET_ROOMS, GET_ROOM, JOIN_ROOM, DETERMINE_WINNER } from '../actions/types';
+import { GET_PLAYER_KEY, CREATE_LOBBY, GET_ROOMS, GET_ROOM, JOIN_ROOM, DETERMINE_WINNER, GET_HIGH_SCORES, GET_GAME_SCORES } from '../actions/types';
 
 const INITIAL_STATE = { examples: [], helloWorldMessage: '' };
 
@@ -24,7 +24,11 @@ export default function(state = INITIAL_STATE, action) {
             });
             return {...state};
         case DETERMINE_WINNER:
-            return {...state, isWinner: action.payload.data.data};
+            return {...state, isWinner: action.payload.data.data.iaWinner, gameScores: action.payload.data.data.rounds};
+        case GET_HIGH_SCORES:
+            return {...state, highScores: action.payload.data.data};
+        case GET_GAME_SCORES:
+            return {...state, gameScores: action.payload.data.data};
         default:
             return state;
     }
