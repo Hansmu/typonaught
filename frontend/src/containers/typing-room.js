@@ -122,7 +122,7 @@ class TypingRoom extends Component {
         });
 
         return (
-            <Table striped bordered condensed hover>
+            <Table striped responsive condensed hover>
                 <thead>
                 <tr>
                     <th>Victory</th>

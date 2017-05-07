@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style> 
-div {
+.lose-animation {
 	width: 100px;
     height: 100px;
     background: #c96265;
@@ -20,10 +16,11 @@ div {
 
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes example {
-    0%   {left:0px; top:0px; width:0px; height:0px;}
-    
-    50%  {left:100px; top:0px; width:100px; height:100px;}
-    100% {left:300px; top:0px; width:0px; height:0px;}
+    0%   {left:0px; top:0px; width:100px; height:100px;}
+    25%  {left:100px; top:0px; width:200px; height:100px; backround:  #54015b;}
+    50%  {left:100px; top:0px; width:200px; height:100px; background: #54015b ;}
+    75%  {left:100px; top:0px; width:200px; height:100px; background: #54015b;}
+    100% {left:0px; top:0px; width:100px; height:100px;}
 }
 
 /* Standard syntax */
@@ -33,17 +30,4 @@ div {
 	50%  {left:100px; top:0px; width:200px; height:100px; background: #54015b ;}
     75%  {left:100px; top:0px; width:200px; height:100px; background: #54015b;}
     100% {left:0px; top:0px; width:100px; height:100px;}
-    }
 }
-</style>
-</head>
-<body>
-
-<p><b>Note:</b> This example does not work in Internet Explorer 9 and earlier versions.</p>
-
-<div></div>
-
-<p><b>Note:</b> When an animation is finished, it changes back to its original style.</p>
-
-</body>
-</html>
