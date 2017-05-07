@@ -7,6 +7,7 @@ public class WordResult {
     private String roomIdentifier;
     private String userIdentifier;
     private Boolean wordCorrect;
+    private Integer timeTaken;
 
     public String getRoomIdentifier() {
         return roomIdentifier;
@@ -31,5 +32,13 @@ public class WordResult {
 
     public void setWordCorrect(Boolean wordCorrect) {
         this.wordCorrect = wordCorrect;
+    }
+
+    public Integer getTimeTaken() {
+        return timeTaken;
+    }
+
+    public void setTimeTaken(Integer timeTaken) {
+        this.timeTaken = timeTaken;
     }
 }

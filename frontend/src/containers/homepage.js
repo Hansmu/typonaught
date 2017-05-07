@@ -2,19 +2,20 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, Panel, Accordion, Table } from 'react-bootstrap';
 
-import { getPlayerKey, createLobby, getRooms, joinRoom } from '../actions';
+import { getPlayerKey, createLobby, getRooms, joinRoom , getHighScores} from '../actions';
 import { getPlayerId, getLobbyId } from '../../utils/ui-utils';
 
 class Homepage extends Component {
 
     componentWillMount() {
         const playerKey = getPlayerId();
-        this.props.dispatch(getRooms())
+        this.props.dispatch(getRooms());
 
         if (!playerKey) {
             this.props.dispatch(getPlayerKey());
         }
 
+        this.props.dispatch(getHighScores());
         window.setInterval(() => this.props.dispatch(getRooms()), 5000);
     }
 
@@ -62,10 +63,32 @@ class Homepage extends Component {
         );
     }
 
-    render () {
-        const playerKey = getPlayerId();
-        const lobbyId = getLobbyId();
+    createHighScoreTable() {
+        const tableRows = this.props.highScores.map(highScore => {
+            return (
+                <tr key={highScore.id}>
+                    <td>{highScore.playerIdentifier}</td>
+                    <td>{highScore.victories}</td>
+                </tr>
+            );
+        });
 
+        return (
+            <Table striped bordered condensed hover>
+                <thead>
+                    <tr>
+                        <th>Player Identifier</th>
+                        <th>Player Victories</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { tableRows }
+                </tbody>
+            </Table>
+        );
+    }
+
+    render () {
         return (
             <div>
                 <Button onClick={() => this.props.dispatch(createLobby(this.props.router.push))}>
@@ -76,6 +99,7 @@ class Homepage extends Component {
                         { this.createLobbyList(this.props.lobbies) }
                     </Panel>
                 </Accordion>
+                { this.createHighScoreTable() }
             </div>
         );
     }
@@ -83,7 +107,8 @@ class Homepage extends Component {
 
 const mapStateToProps = (state) => ({
     playerId: state.main.playerId,
-    lobbies: state.main.lobbies || []
+    lobbies: state.main.lobbies || [],
+    highScores: state.main.highScores || []
 });
 
 export default connect(mapStateToProps, dispatch => ({dispatch}))(Homepage);

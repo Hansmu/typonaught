@@ -5,4 +5,5 @@ export const JOIN_ROOM = 'JOIN_ROOM';
 export const GET_ROOM = 'GET_ROOM';
 export const DETERMINE_WINNER = 'DETERMINE_WINNER';
 export const SET_USER_READY = 'SET_USER_READY';
-
+export const GET_HIGH_SCORES = 'GET_HIGH_SCORES';
+export const GET_GAME_SCORES = 'GET_GAME_SCORES';

@@ -19,6 +19,8 @@ public class Room {
     private Integer playerOneScore;
     private Integer playerTwoScore;
     private Integer currentWordIndex;
+    private Integer playerOneVictories;
+    private Integer playerTwoVictories;
 
     @Column(name="typing_text")
     @Lob
@@ -33,6 +35,8 @@ public class Room {
         this.roomIdentifier = roomIdentifier;
         this.playerOneIdentifier = playerOneIdentifier;
         this.currentWordIndex = 0;
+        this.playerOneVictories = 0;
+        this.playerTwoVictories = 0;
 
         this.playerOneReady = true;
         this.playerTwoReady = false;
@@ -130,5 +134,21 @@ public class Room {
 
     public void setActiveWord(String activeWord) {
         this.activeWord = activeWord;
+    }
+
+    public Integer getPlayerOneVictories() {
+        return playerOneVictories;
+    }
+
+    public void setPlayerOneVictories(Integer playerOneVictories) {
+        this.playerOneVictories = playerOneVictories;
+    }
+
+    public Integer getPlayerTwoVictories() {
+        return playerTwoVictories;
+    }
+
+    public void setPlayerTwoVictories(Integer playerTwoVictories) {
+        this.playerTwoVictories = playerTwoVictories;
     }
 }

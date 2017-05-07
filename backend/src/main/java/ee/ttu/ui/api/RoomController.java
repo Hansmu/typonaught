@@ -25,6 +25,11 @@ public class RoomController {
         return Result.ok(roomService.getRoomByIdentifier(roomId));
     }
 
+    @GetMapping("/{roomId}/scores")
+    public Result getRoomScores(@PathVariable("roomId") String roomId) {
+        return Result.ok(roomService.getRoomScores(roomId));
+    }
+
     @GetMapping("rooms")
     public Result getUnreadyRooms() {
         return Result.ok(roomService.getAllRooms());
@@ -53,5 +58,10 @@ public class RoomController {
     @RequestMapping(value = "ready-wait", method = RequestMethod.GET)
     public Result queryForRoomReady(@RequestParam("room-id") String roomIdentifier) {
         return Result.ok(roomService.isRoomReady(roomIdentifier));
+    }
+
+    @GetMapping("high-scores")
+    public Result getAllHighScores() {
+        return Result.ok(roomService.getAllHighScores());
     }
 }
