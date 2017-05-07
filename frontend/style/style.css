@@ -1,3 +1,7 @@
-body{
-    background-image: url("./animations/backround.png");
+body {
+    background: url("./animations/backround.png") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
