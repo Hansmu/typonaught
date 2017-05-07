@@ -41,7 +41,9 @@ class TypingRoom extends Component {
         return (
             <Row>
                 <Col md={12}>
-                    <h1>Waiting for other player</h1>
+                    <h1 style={{textAlign: 'center'}}>Waiting for other player</h1>
+                </Col>
+                <Col md={9}>
                     <div className="loading-animation col-centered"/>
                 </Col>
             </Row>
@@ -106,6 +108,10 @@ class TypingRoom extends Component {
     }
 
     renderGameScores() {
+        if (this.props.gameScores.length <= 0) {
+            return <div/>;
+        }
+
         const gameScoreRows = this.props.gameScores.map(gameScore => {
             const green = '#5cb85c';
             const red = '#d9534f';
