@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class RoomService {
@@ -39,12 +40,15 @@ public class RoomService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     private String setRoomPlayerReady(PlayerReadyJson playerReadyJson) {
         Room room = roomRepository.findOneByRoomIdentifier(playerReadyJson.getRoomIdentifier());
+        boolean isPlayerOne = room.getPlayerOneIdentifier().equals(playerReadyJson.getPlayerIdentifier());
 
-        if (room.getPlayerTwoIdentifier() == null) {
+        if (isPlayerOne) {
+            room.setPlayerOneReady(true);
+        } else {
             room.setPlayerTwoReady(true);
-            roomRepository.save(room);
         }
 
+        roomRepository.save(room);
         return room.getRoomIdentifier();
     }
 
@@ -87,9 +91,15 @@ public class RoomService {
             }
         }
 
-        boolean isFirst = isPlayerOne ? room.getPlayerTwoScore() == null && wordResult.isWordCorrect() : room.getPlayerOneScore() == null && wordResult.isWordCorrect();
+        boolean isPlayerOneWinner = (room.getPlayerTwoScore() == null || room.getPlayerTwoScore().equals(0)) && wordResult.isWordCorrect();
+        boolean isPlayerTwoWinner = (room.getPlayerOneScore() == null || room.getPlayerOneScore().equals(0)) && wordResult.isWordCorrect();
+
+        boolean isFirst = isPlayerOne ? isPlayerOneWinner : isPlayerTwoWinner;
 
         if (room.getPlayerOneScore() != null && room.getPlayerTwoScore() != null) {
+            String[] words = room.getTypingText().split(" ");
+            room.setCurrentWordIndex(ThreadLocalRandom.current().nextInt(0, words.length));
+
             room.setPlayerOneScore(null);
             room.setPlayerTwoScore(null);
 

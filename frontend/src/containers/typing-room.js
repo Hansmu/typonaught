@@ -8,6 +8,7 @@ import { getPlayerId, getLobbyId } from '../../utils/ui-utils';
 
 let initialRender = true;
 let isSubmitted = false;
+let isNewRoundClicked = true;
 
 class TypingRoom extends Component {
 
@@ -15,7 +16,7 @@ class TypingRoom extends Component {
         this.props.dispatch(getRoom(this.props.params.roomId));
 
         this.state = { enteredWord: '' };
-        window.setInterval(() => this.props.dispatch(getRoom(this.props.params.roomId)), 5000);
+        window.setInterval(() => this.props.dispatch(getRoom(this.props.params.roomId)), 500);
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.sendUserReady = this.sendUserReady.bind(this);
@@ -26,6 +27,7 @@ class TypingRoom extends Component {
     componentWillUnmount() {
         initialRender = true;
         isSubmitted = false;
+        isNewRoundClicked = true;
     }
 
     showWaitingForPlayer() {
@@ -89,11 +91,11 @@ class TypingRoom extends Component {
         return (
             <div>
                 { this.renderResults() }
-                { !initialRender && isWaiting && this.renderNewMatchButton() }
-                { initialRender && isWaiting && this.showWaitingForPlayer() }
+                { isSubmitted && isWaiting && this.renderNewMatchButton() }
+                { ((!initialRender && isSubmitted && !isWaiting) || (!isSubmitted && isWaiting && isNewRoundClicked)) && this.showWaitingForPlayer() }
 
                 {
-                    !isWaiting &&
+                    !isWaiting && !isSubmitted &&
                     <div>
                         Current word to type: { this.props.room.activeWord }
                         <form onSubmit={this.handleSubmit}>
