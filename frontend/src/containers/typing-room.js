@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'react-loading';
-import { Button, Table, Glyphicon } from 'react-bootstrap';
+import { Button, Table, Glyphicon, Col, Row } from 'react-bootstrap';
 
 import { getRoom, determineWinner, setUserReady, getGameScores } from '../actions';
+
+import '../../style/animations/loading.css';
 
 let initialRender = true;
 let isSubmitted = false;
@@ -37,10 +39,12 @@ class TypingRoom extends Component {
 
     showWaitingForPlayer() {
         return (
-            <div>
-                Waiting for player
-                <Loading type="bubbles" color='#e3e3e3'/>
-            </div>
+            <Row>
+                <Col md={12}>
+                    <h1>Waiting for other player</h1>
+                    <div className="loading-animation col-centered"/>
+                </Col>
+            </Row>
         );
     }
 
@@ -168,9 +172,9 @@ class TypingRoom extends Component {
             <div>
                 { this.renderResults() }
                 { isSubmitted && isWaiting && this.renderNewMatchButton() }
-                { ((!initialRender && isSubmitted && !isWaiting) || (!isSubmitted && isWaiting && isNewRoundClicked)) && this.showWaitingForPlayer() }
-
                 { this.renderTextArea() }
+
+                { ((!initialRender && isSubmitted && !isWaiting) || (!isSubmitted && isWaiting && isNewRoundClicked)) && this.showWaitingForPlayer() }
             </div>
         );
     }
