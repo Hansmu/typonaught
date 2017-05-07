@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'react-loading';
-import { Button,Table } from 'react-bootstrap';
+import { Button, Table, Glyphicon } from 'react-bootstrap';
 
 import { getRoom, determineWinner, setUserReady, getGameScores } from '../actions';
 
@@ -103,9 +103,18 @@ class TypingRoom extends Component {
 
     renderGameScores() {
         const gameScoreRows = this.props.gameScores.map(gameScore => {
+            const green = '#5cb85c';
+            const red = '#d9534f';
+
+            const style = {
+                backgroundColor: gameScore.victory ? green : red
+            };
+
             return (
-                <tr key={gameScore.id}>
-                    <td>{gameScore.victory}</td>
+                <tr key={gameScore.id} style={style}>
+                    <td>
+                        <Glyphicon glyph={gameScore.victory ? 'ok' : 'remove'} style={{color: 'white'}}/>
+                    </td>
                     <td>{gameScore.word}</td>
                     <td>{gameScore.timeSpent}</td>
                 </tr>
