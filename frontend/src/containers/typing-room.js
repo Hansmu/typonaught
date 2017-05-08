@@ -48,7 +48,7 @@ class TypingRoom extends Component {
     showWaitingForPlayer() {
         return (
             <Row>
-                <Col md={12}>
+                <Col md={12} style={{marginTop: '80px'}}>
                     <h1 style={{textAlign: 'center'}}>Waiting for other player</h1>
                 </Col>
                 <Col md={9}>
@@ -132,7 +132,7 @@ class TypingRoom extends Component {
                         <Glyphicon glyph={gameScore.victory ? 'ok' : 'remove'} style={{color: 'white'}}/>
                     </td>
                     <td>{gameScore.word}</td>
-                    <td>{gameScore.timeSpent}</td>
+                    <td>{gameScore.timeSpent / 1000} s</td>
                 </tr>
             );
         });
@@ -142,13 +142,13 @@ class TypingRoom extends Component {
                 <Table striped responsive condensed hover>
                     <thead>
                     <tr>
-                        <th>Victory</th>
-                        <th>Word</th>
-                        <th>Time</th>
+                        <th style={centered}>Victory</th>
+                        <th style={centered}>Word</th>
+                        <th style={centered}>Time</th>
                     </tr>
                     </thead>
                     <tbody>
-                    { gameScoreRows }
+                        { gameScoreRows }
                     </tbody>
                 </Table>
             );
@@ -204,11 +204,11 @@ class TypingRoom extends Component {
         this.setStartTime();
         return (
             <div>
-                <Row>
+                <Row style={{marginTop: '20px'}}>
                     { this.renderResults() }
                 </Row>
                 <Row>
-                    <Col md={7}>
+                    <Col md={6} style={{textAlign: 'center'}}>
                         { this.renderGameScores() }
                     </Col>
                     <Col md={5}>
