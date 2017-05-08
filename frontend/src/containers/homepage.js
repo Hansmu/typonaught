@@ -7,6 +7,8 @@ import { getPlayerId, getLobbyId } from '../../utils/ui-utils';
 
 import '../../style/animations/round-button.css';
 
+const centered = { textAlign: 'center' };
+
 class Homepage extends Component {
 
     constructor(props) {
@@ -32,15 +34,25 @@ class Homepage extends Component {
     }
 
     createLobbyList(lobbies) {
+        if (lobbies.length == 0) {
+            return (
+                <div style={centered}>
+                    <h6>There appear to be no lobbies yet</h6>
+                    <h6>Click on the button to add a lobby</h6>
+                </div>
+            );
+        }
+
         const lobbyRows = lobbies.map(lobby => {
             const isJoiningAllowed = !lobby.playerOneReady || !lobby.playerTwoReady;
 
             return (
                 <tr key={lobby.id}>
-                    <td>{lobby.id}</td>
-                    <td>{lobby.roomIdentifier}</td>
-                    <td>
+                    <td style={centered}>{lobby.id}</td>
+                    <td style={centered}>{lobby.roomIdentifier}</td>
+                    <td style={centered}>
                         <Button disabled={!isJoiningAllowed}
+                                bsStyle="success"
                                 onClick={() => this.joinLobby(lobby.roomIdentifier)}>
                             Join
                         </Button>
@@ -52,8 +64,8 @@ class Homepage extends Component {
         const lobbyHeaders = (
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Room Identifier</th>
+                    <th style={centered}>#</th>
+                    <th style={centered}>Room Identifier</th>
                     <th/>
                 </tr>
             </thead>
@@ -70,11 +82,20 @@ class Homepage extends Component {
     }
 
     createHighScoreTable() {
+        if (this.props.highScores.length <= 0) {
+            return (
+                <div style={centered}>
+                    <h6>There are no high scores yet</h6>
+                    <h6>Join a lobby and play to create some.</h6>
+                </div>
+            );
+        }
+
         const tableRows = this.props.highScores.map(highScore => {
             return (
                 <tr key={highScore.id}>
-                    <td>{highScore.playerIdentifier}</td>
-                    <td>{highScore.victories}</td>
+                    <td style={centered}>{highScore.playerIdentifier}</td>
+                    <td style={centered}>{highScore.victories}</td>
                 </tr>
             );
         });
@@ -83,8 +104,8 @@ class Homepage extends Component {
             <Table striped responsive condensed hover>
                 <thead>
                     <tr>
-                        <th>Player Identifier</th>
-                        <th>Player Victories</th>
+                        <th style={centered}>Player Identifier</th>
+                        <th style={centered}>Player Victories</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -100,7 +121,8 @@ class Homepage extends Component {
                 <Col md={12} style={{marginBottom: '20px', marginTop: '20px'}}>
                     <div className="round-button col-centered"
                          onClick={() => this.props.dispatch(createLobby(this.props.router.push))}>
-                        <Glyphicon glyph="plus" style={{fontSize: '50px', color: 'white', marginTop: '23px', marginLeft: '26px'}}/>
+                        <Glyphicon glyph="plus"
+                                   style={{fontSize: '50px', color: 'white', marginTop: '23px', marginLeft: '26px'}}/>
                     </div>
                 </Col>
             </Row>
@@ -111,10 +133,22 @@ class Homepage extends Component {
         return (
             <div>
                 { this.renderCreateLobbyButton() }
-                    <Panel header={<h3>Lobbies</h3>} eventKey="1">
-                        { this.createLobbyList(this.props.lobbies) }
-                    </Panel>
-                { this.createHighScoreTable() }
+                <Row>
+                    <Col md={8}>
+                        <Panel bsStyle="success"
+                               header={<h1>Lobbies</h1>}
+                               eventKey="1">
+                            { this.createLobbyList(this.props.lobbies) }
+                        </Panel>
+                    </Col>
+                    <Col md={4}>
+                        <Panel bsStyle="success"
+                               header={<h3>High Scores</h3>}
+                               eventKey="1">
+                            { this.createHighScoreTable() }
+                        </Panel>
+                    </Col>
+                </Row>
             </div>
         );
     }
