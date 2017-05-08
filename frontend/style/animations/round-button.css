@@ -14,6 +14,16 @@
     animation-iteration-count: infinite;
 }
 
+.round-button-red {
+    width: 100px;
+    height: 100px;
+    background: #c96265;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    position: relative;
+}
+
 .col-centered {
     float: none;
     margin: 0 auto;

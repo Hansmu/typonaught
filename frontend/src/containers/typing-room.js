@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'react-loading';
-import { Button, Table, Glyphicon, Col, Row } from 'react-bootstrap';
+import { Button, Table, Glyphicon, Col, Row, FormControl } from 'react-bootstrap';
 
 import { getRoom, determineWinner, setUserReady, getGameScores } from '../actions';
 
 import '../../style/animations/loading.css';
+import '../../style/animations/round-button.css'
+import '../../style/animations/lose.css'
+import '../../style/animations/win.css'
 
 let initialRender = true;
 let isSubmitted = false;
@@ -14,12 +17,17 @@ let isNewRoundClicked = true;
 let startTime = 0;
 let wordStarted = false;
 
+const centered = { textAlign: 'center' };
+
 class TypingRoom extends Component {
 
     componentWillMount() {
         this.props.dispatch(getRoom(this.props.params.roomId));
 
-        this.state = { enteredWord: '' };
+        this.state = {
+            enteredWord: '',
+            timeTaken: 0
+        };
         window.setInterval(() => this.props.dispatch(getRoom(this.props.params.roomId)), 500);
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -65,20 +73,16 @@ class TypingRoom extends Component {
     renderResults() {
         if (!initialRender && isSubmitted && this.props.isWinner) {
             return (
-                <div>
-                    <p>You have won</p>
-                </div>);
+                <div className="win-animation col-centered"/>);
         }
 
         if (!initialRender && isSubmitted && !this.props.isWinner) {
             return (
-                <div>
-                    <p>You have lost</p>
-                </div>
+                <div className="lose-animation col-centered"/>
             );
         }
 
-        return <div/>;
+        return <div className="round-button-red col-centered"/>;
     }
 
     sendUserReady() {
@@ -108,6 +112,8 @@ class TypingRoom extends Component {
     }
 
     renderGameScores() {
+        const isWaiting = !this.props.room.playerOneReady || !this.props.room.playerTwoReady;
+
         if (this.props.gameScores.length <= 0) {
             return <div/>;
         }
@@ -131,39 +137,61 @@ class TypingRoom extends Component {
             );
         });
 
-        return (
-            <Table striped responsive condensed hover>
-                <thead>
-                <tr>
-                    <th>Victory</th>
-                    <th>Word</th>
-                    <th>Time</th>
-                </tr>
-                </thead>
-                <tbody>
+        if (!(!isWaiting && !isSubmitted)) {
+            return (
+                <Table striped responsive condensed hover>
+                    <thead>
+                    <tr>
+                        <th>Victory</th>
+                        <th>Word</th>
+                        <th>Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     { gameScoreRows }
-                </tbody>
-            </Table>
-        );
+                    </tbody>
+                </Table>
+            );
+        }
     }
 
     renderTextArea() {
         const isWaiting = !this.props.room.playerOneReady || !this.props.room.playerTwoReady;
+        const timeTakenInSeconds = parseInt((new Date().getTime() - startTime) / 1000);
 
         if (!isWaiting && !isSubmitted) {
             return (
                 <div>
-                    Current word to type: { this.props.room.activeWord }
+                    <h4 style={{...centered, marginTop: '60px', marginBottom: '60px'}}>
+                        Current word to type
+                    </h4>
+                    <h1 style={{...centered, marginTop: '40px', marginBottom: '40px'}}>
+                        { this.props.room.activeWord }
+                    </h1>
+
                     <form onSubmit={this.handleSubmit}>
-                        <input onChange={event => this.setState({enteredWord: event.target.value})}
-                               value={this.state.enteredWord}
-                               name="enteredWord"/>
+                        <Row>
+                            <Col md={3}/>
+                            <Col md={6}>
+                                <FormControl
+                                    style={{...centered, height: '60px'}}
+                                    name="enteredWord"
+                                    type="text"
+                                    value={this.state.enteredWord}
+                                    placeholder="Type the word fast to beat your opponent!"
+                                    onChange={event => this.setState({enteredWord: event.target.value})}/>
+                            </Col>
+                            <Col md={3}/>
+                        </Row>
                     </form>
+
+                    <h3 className="white-text-black-outline"
+                        style={{...centered, marginTop: '40px', marginBottom: '40px'}}>
+                        { timeTakenInSeconds } s
+                    </h3>
                 </div>
             );
         }
-
-        return this.renderGameScores();
     }
 
     render () {
@@ -176,8 +204,18 @@ class TypingRoom extends Component {
         this.setStartTime();
         return (
             <div>
-                { this.renderResults() }
-                { isSubmitted && isWaiting && this.renderNewMatchButton() }
+                <Row>
+                    { this.renderResults() }
+                </Row>
+                <Row>
+                    <Col md={7}>
+                        { this.renderGameScores() }
+                    </Col>
+                    <Col md={5}>
+                        { isSubmitted && isWaiting && this.renderNewMatchButton() }
+                    </Col>
+                </Row>
+
                 { this.renderTextArea() }
 
                 { ((!initialRender && isSubmitted && !isWaiting) || (!isSubmitted && isWaiting && isNewRoundClicked)) && this.showWaitingForPlayer() }

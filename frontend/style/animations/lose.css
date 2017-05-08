@@ -6,16 +6,16 @@
     -webkit-border-radius: 50px;
     border-radius: 50px;
     position: relative;
-    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-name: loseAnimation; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
     -webkit-animation-iteration-count: infinite; /* Safari 4.0 - 8.0 */
-    animation-name: example;
+    animation-name: loseAnimation;
     animation-duration: 2s;
     animation-iteration-count: 1;
 }
 
 /* Safari 4.0 - 8.0 */
-@-webkit-keyframes example {
+@-webkit-keyframes loseAnimation {
     0%   {left:0px; top:0px; width:100px; height:100px;}
     25%  {left:100px; top:0px; width:200px; height:100px; backround:  #54015b;}
     50%  {left:100px; top:0px; width:200px; height:100px; background: #54015b ;}
@@ -24,7 +24,7 @@
 }
 
 /* Standard syntax */
-@keyframes example {
+@keyframes loseAnimation {
     0%   {left:0px; top:0px; width:100px; height:100px;}
     25%  {left:100px; top:0px; width:200px; height:100px; backround:  #54015b;}
 	50%  {left:100px; top:0px; width:200px; height:100px; background: #54015b ;}
