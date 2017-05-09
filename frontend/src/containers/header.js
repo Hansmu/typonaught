@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 
 import { getUsername } from '../../utils/ui-utils';
 
+const driveSoundtrack = new Audio('../../sounds/drive.mp3');
+driveSoundtrack.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+driveSoundtrack.play();
+
 export default class Header extends Component {
 
   render() {

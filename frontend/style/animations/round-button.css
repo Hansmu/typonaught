@@ -14,6 +14,16 @@
     animation-iteration-count: infinite;
 }
 
+.round-button-green {
+    width: 100px;
+    height: 100px;
+    background: #4bf282;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    position: relative;
+}
+
 .round-button-red {
     width: 100px;
     height: 100px;

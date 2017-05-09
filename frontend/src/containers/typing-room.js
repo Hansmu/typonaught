@@ -21,6 +21,8 @@ let wordStarted = false;
 
 const centered = { textAlign: 'center' };
 
+const winSound = new Audio('../../sounds/coin_effect.mp3');
+
 class TypingRoom extends Component {
 
     componentWillMount() {
@@ -91,6 +93,8 @@ class TypingRoom extends Component {
         if (isDisplayingWin) {
             window.setTimeout(() => isDisplayingWin = false, 2000);
             if (!initialRender && isSubmitted && this.props.isWinner) {
+                winSound.play();
+
                 return (
                     <div style={{marginTop: '90px'}}
                          className="win-animation col-centered"/>
@@ -116,7 +120,11 @@ class TypingRoom extends Component {
 
         return (
             <div style={{marginTop: '90px'}}
-                 className="round-button-red col-centered"/>
+                 className="round-button-red col-centered"
+                 onClick={() => this.props.router.push('/')}>
+                <Glyphicon glyph="home"
+                           style={{fontSize: '50px', color: 'white', marginTop: '23px', marginLeft: '23px'}}/>
+            </div>
         );
     }
 
@@ -125,7 +133,7 @@ class TypingRoom extends Component {
             <div>
                 <div style={{marginTop: '90px'}}
                      onClick={this.sendUserReady}
-                     className="round-button-red col-centered">
+                     className="round-button-green col-centered">
                     <Glyphicon glyph="play-circle"
                                style={{fontSize: '50px', color: 'white', marginTop: '23px', marginLeft: '26px'}}/>
                 </div>
