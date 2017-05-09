@@ -24,6 +24,16 @@
     position: relative;
 }
 
+.round-button-red-small {
+    width: 50px;
+    height: 50px;
+    background: #c96265;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    position: relative;
+}
+
 .col-centered {
     float: none;
     margin: 0 auto;

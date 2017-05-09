@@ -118,7 +118,7 @@ class Homepage extends Component {
     renderCreateLobbyButton() {
         return (
             <Row>
-                <Col md={12} style={{marginBottom: '20px', marginTop: '20px'}}>
+                <Col md={12} style={{marginBottom: '20px', marginTop: '90px'}}>
                     <div className="round-button col-centered"
                          onClick={() => this.props.dispatch(createLobby(this.props.router.push))}>
                         <Glyphicon glyph="plus"

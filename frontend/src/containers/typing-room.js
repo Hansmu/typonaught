@@ -10,6 +10,8 @@ import '../../style/animations/round-button.css'
 import '../../style/animations/lose.css'
 import '../../style/animations/win.css'
 
+let isDisplayingWin = false;
+
 let initialRender = true;
 let isSubmitted = false;
 let isNewRoundClicked = true;
@@ -22,6 +24,15 @@ const centered = { textAlign: 'center' };
 class TypingRoom extends Component {
 
     componentWillMount() {
+        isDisplayingWin = false;
+
+        initialRender = true;
+        isSubmitted = false;
+        isNewRoundClicked = true;
+
+        startTime = 0;
+        wordStarted = false;
+
         this.props.dispatch(getRoom(this.props.params.roomId));
 
         this.state = {
@@ -39,19 +50,23 @@ class TypingRoom extends Component {
     }
 
     componentWillUnmount() {
+        isDisplayingWin = false;
+
         initialRender = true;
         isSubmitted = false;
         isNewRoundClicked = true;
+
+        startTime = 0;
         wordStarted = false;
     }
 
     showWaitingForPlayer() {
         return (
             <Row>
-                <Col md={12} style={{marginTop: '80px'}}>
+                <Col md={12} style={{marginTop: '20px'}}>
                     <h1 style={{textAlign: 'center'}}>Waiting for other player</h1>
                 </Col>
-                <Col md={9}>
+                <Col md={12}>
                     <div className="loading-animation col-centered"/>
                 </Col>
             </Row>
@@ -65,37 +80,67 @@ class TypingRoom extends Component {
         const timeTaken = new Date().getTime() - startTime;
 
         this.props.dispatch(determineWinner(this.props.params.roomId, isWordCorrect, timeTaken));
-
+        isDisplayingWin = true;
         this.setState({enteredWord: ''});
         isSubmitted = true;
     }
 
     renderResults() {
-        if (!initialRender && isSubmitted && this.props.isWinner) {
-            return (
-                <div className="win-animation col-centered"/>);
+        const isWaiting = !this.props.room.playerOneReady || !this.props.room.playerTwoReady;
+
+        if (isDisplayingWin) {
+            window.setTimeout(() => isDisplayingWin = false, 2000);
+            if (!initialRender && isSubmitted && this.props.isWinner) {
+                return (
+                    <div style={{marginTop: '90px'}}
+                         className="win-animation col-centered"/>
+                );
+            }
+
+            if (!initialRender && isSubmitted && !this.props.isWinner) {
+                return (
+                    <div style={{marginTop: '90px'}}
+                         className="lose-animation col-centered">
+                    </div>
+                );
+            }
         }
 
-        if (!initialRender && isSubmitted && !this.props.isWinner) {
-            return (
-                <div className="lose-animation col-centered"/>
-            );
+        if (isSubmitted && isWaiting) {
+            return this.renderNewMatchButton();
         }
 
-        return <div className="round-button-red col-centered"/>;
+        if ((!initialRender && isSubmitted && !isWaiting) || (!isSubmitted && isWaiting && isNewRoundClicked)) {
+            return this.showWaitingForPlayer();
+        }
+
+        return (
+            <div style={{marginTop: '90px'}}
+                 className="round-button-red col-centered"/>
+        );
+    }
+
+    renderNewMatchButton() {
+        return (
+            <div>
+                <div style={{marginTop: '90px'}}
+                     onClick={this.sendUserReady}
+                     className="round-button-red col-centered">
+                    <Glyphicon glyph="play-circle"
+                               style={{fontSize: '50px', color: 'white', marginTop: '23px', marginLeft: '26px'}}/>
+                </div>
+                <div className="round-button-red-small col-centered"
+                     onClick={() => this.props.router.push('/')}>
+                    <Glyphicon glyph="home"
+                               style={{fontSize: '25px', color: 'white', marginTop: '11px', marginLeft: '12px'}}/>
+                </div>
+            </div>
+        );
     }
 
     sendUserReady() {
         isSubmitted = false;
         this.props.dispatch(setUserReady(this.props.params.roomId));
-    }
-
-    renderNewMatchButton() {
-        return (
-            <Button onClick={this.sendUserReady}>
-                Ready For New Match
-            </Button>
-        );
     }
 
     setStartTime() {
@@ -204,21 +249,17 @@ class TypingRoom extends Component {
         this.setStartTime();
         return (
             <div>
-                <Row style={{marginTop: '20px'}}>
+                <Row>
                     { this.renderResults() }
                 </Row>
-                <Row>
+                <Row style={{marginTop: '20px'}}>
+                    <Col md={3}/>
                     <Col md={6} style={{textAlign: 'center'}}>
                         { this.renderGameScores() }
                     </Col>
-                    <Col md={5}>
-                        { isSubmitted && isWaiting && this.renderNewMatchButton() }
-                    </Col>
+                    <Col md={3}/>
                 </Row>
-
                 { this.renderTextArea() }
-
-                { ((!initialRender && isSubmitted && !isWaiting) || (!isSubmitted && isWaiting && isNewRoundClicked)) && this.showWaitingForPlayer() }
             </div>
         );
     }
