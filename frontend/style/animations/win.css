@@ -25,9 +25,9 @@
 
 /* Standard syntax */
 @keyframes winAnimation {
-    0%   {left:0px; top:0px; width:100px; height:100px;}
-    25%  {left:100px; top:0px; width:200px; height:100px; background:  #4bf282; }
+    0%   {left:0px; top:0px; width:100px; height:100px;   background:  #c96265;}
+    25%  {left:100px; top:0px; width:200px; height:100px; background:  #c96265; }
 	50%  {left:100px; top:0px; width:200px; height:100px; background-image: url("win_plus_one.png"); }
     75%  {left:100px; top:0px; width:200px; height:100px; background-image: url("win_plus_one.png");  }
-    100% {left:0px; top:0px; width:100px; height:100px;}
+    100% {left:0px; top:0px; width:100px; height:100px;   background:  #c96265;}
 }
