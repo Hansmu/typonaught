@@ -14,12 +14,14 @@ public class HighScore {
     private Long id;
     private String playerIdentifier;
     private Integer victories;
+    private String username;
 
     public HighScore() {
     }
 
-    public HighScore(String playerIdentifier) {
+    public HighScore(String playerIdentifier, String username) {
         this.playerIdentifier = playerIdentifier;
+        this.username = username;
         this.victories = 0;
     }
 
@@ -45,5 +47,13 @@ public class HighScore {
 
     public void setVictories(Integer victories) {
         this.victories = victories;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

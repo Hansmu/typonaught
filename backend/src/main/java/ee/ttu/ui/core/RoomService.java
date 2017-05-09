@@ -112,13 +112,13 @@ public class RoomService {
             currentScore++;
             room.setPlayerOneVictories(currentScore);
 
-            addToHighScore(wordResult.getUserIdentifier());
+            addToHighScore(wordResult.getUserIdentifier(), wordResult.getUsername());
         } else if (isPlayerTwoWinner) {
             Integer currentScore = room.getPlayerTwoVictories();
             currentScore++;
             room.setPlayerTwoVictories(currentScore);
 
-            addToHighScore(wordResult.getUserIdentifier());
+            addToHighScore(wordResult.getUserIdentifier(), wordResult.getUsername());
         }
 
         saveMatchResult(isPlayerOne, room, isPlayerOneWinner, wordResult, isPlayerTwoWinner);
@@ -153,10 +153,10 @@ public class RoomService {
         }
     }
 
-    private void addToHighScore(String playerIdentifier) {
+    private void addToHighScore(String playerIdentifier, String username) {
         HighScore highScore = highScoreRepository.findOneByPlayerIdentifier(playerIdentifier);
         if (highScore == null) {
-            HighScore newHighScore = new HighScore(playerIdentifier);
+            HighScore newHighScore = new HighScore(playerIdentifier, username);
             newHighScore.setVictories(1);
 
             highScoreRepository.save(newHighScore);
@@ -170,7 +170,7 @@ public class RoomService {
     }
 
     public List<HighScore> getAllHighScores() {
-        return highScoreRepository.findAll();
+        return highScoreRepository.findAllSortedByScore();
     }
 
     public List<GameMatch> getRoomScores(String roomIdentifier) {

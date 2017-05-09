@@ -1,6 +1,6 @@
 import { CREATE_LOBBY, GET_ROOMS, JOIN_ROOM, GET_ROOM, DETERMINE_WINNER, SET_USER_READY, GET_HIGH_SCORES, GET_GAME_SCORES } from '../types';
 import { postRequest, externalGetRequest, getRequest } from '../../../utils/request-utils';
-import { getPlayerId } from '../../../utils/ui-utils';
+import { getPlayerId, getUsername } from '../../../utils/ui-utils';
 
 
 function generateText() {
@@ -59,7 +59,8 @@ export function determineWinner(roomIdentifier, isWordCorrect, timeTaken) {
         type: DETERMINE_WINNER,
         payload: postRequest('room/submit-result', {
             roomIdentifier, isWordCorrect, timeTaken,
-            userIdentifier: getPlayerId()
+            userIdentifier: getPlayerId(),
+            username: getUsername()
         })
     };
 }

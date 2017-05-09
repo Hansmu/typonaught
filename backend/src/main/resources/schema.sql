@@ -30,5 +30,6 @@ CREATE TABLE high_score
 (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   player_identifier VARCHAR(40),
+  username VARCHAR(250),
   victories INT
 );

@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Button, Panel, Accordion, Table, Glyphicon, Row, Col } from 'react-bootstrap';
+import { Button, Panel, Table, Glyphicon, Row, Col, FormControl } from 'react-bootstrap';
 
 import { getPlayerKey, createLobby, getRooms, joinRoom , getHighScores} from '../actions';
-import { getPlayerId, getLobbyId } from '../../utils/ui-utils';
+import { getPlayerId, getLobbyId, getUsername, setUsername } from '../../utils/ui-utils';
 
 import '../../style/animations/round-button.css';
 
@@ -14,6 +14,12 @@ class Homepage extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            username: ''
+        };
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.renderUsernameField = this.renderUsernameField.bind(this);
         this.renderCreateLobbyButton = this.renderCreateLobbyButton.bind(this);
     }
 
@@ -31,6 +37,10 @@ class Homepage extends Component {
 
     joinLobby(roomIdentifier) {
         this.props.dispatch(joinRoom(roomIdentifier, this.props.router.push));
+    }
+
+    handleSubmit() {
+        setUsername(this.state.username);
     }
 
     createLobbyList(lobbies) {
@@ -94,7 +104,7 @@ class Homepage extends Component {
         const tableRows = this.props.highScores.map(highScore => {
             return (
                 <tr key={highScore.id}>
-                    <td style={centered}>{highScore.playerIdentifier}</td>
+                    <td style={centered}>{highScore.username ? highScore.username : highScore.playerIdentifier}</td>
                     <td style={centered}>{highScore.victories}</td>
                 </tr>
             );
@@ -129,7 +139,33 @@ class Homepage extends Component {
         );
     }
 
+    renderUsernameField() {
+        return (
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <Row style={{marginTop: '100px'}}>
+                        <Col md={3}/>
+                        <Col md={6}>
+                            <FormControl
+                                style={{...centered, height: '60px'}}
+                                name="username"
+                                type="text"
+                                value={this.state.username}
+                                placeholder="Enter your username"
+                                onChange={event => this.setState({username: event.target.value})}/>
+                        </Col>
+                        <Col md={3}/>
+                    </Row>
+                </form>
+            </div>
+        );
+    }
+
     render () {
+        if (!getUsername()) {
+            return this.renderUsernameField();
+        }
+
         return (
             <div>
                 { this.renderCreateLobbyButton() }

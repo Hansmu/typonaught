@@ -6,6 +6,7 @@ public class WordResult {
 
     private String roomIdentifier;
     private String userIdentifier;
+    private String username;
     private Boolean wordCorrect;
     private Integer timeTaken;
 
@@ -40,5 +41,13 @@ public class WordResult {
 
     public void setTimeTaken(Integer timeTaken) {
         this.timeTaken = timeTaken;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
